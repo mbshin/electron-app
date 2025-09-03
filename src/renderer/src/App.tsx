@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react'
-
-
-
+import { JSX, useEffect, useState } from 'react'
 
 type LoadState =
   | { kind: 'idle' }
@@ -9,14 +6,13 @@ type LoadState =
   | { kind: 'error'; msg: string }
   | { kind: 'ready'; cfg: any }
 
-export default function App() {
+export default function App(): JSX.Element {
   // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 
+  const [result, setResult] = useState('')
+  const [state, setState] = useState<LoadState>({ kind: 'idle' })
 
-   const [result, setResult] = useState("")
- const [state, setState] = useState<LoadState>({ kind: 'idle' })
-
- useEffect(() => {
+  useEffect(() => {
     let mounted = true
     ;(async () => {
       setState({ kind: 'loading' })
@@ -25,29 +21,27 @@ export default function App() {
       if (res.ok) setState({ kind: 'ready', cfg: res.data })
       else setState({ kind: 'error', msg: res.error })
     })()
-    return () => { mounted = false }
+    return () => {
+      mounted = false
+    }
   }, [])
 
-  const handleClick = async () => {
+  const handleClick = async () : Promise<void> => {
     // example: call Electron preload API
-    const res = await window.api?.ping()
+    const res = window.api?.ping()
     // if (res.ok) {
     //   setResult(JSON.stringify(res.data))
     // } else {
-      setResult(res)
-    
+    setResult(res)
   }
 
   return (
     <>
-   
-          <div>
-      <button onClick={handleClick}>Load Config</button>
-      <p>{result}</p>
-         {JSON.stringify(state.cfg, null, 2)}
-    </div>
-
-      
+      <div>
+        <button onClick={handleClick}>Load Config</button>
+        <p>{result}</p>
+        {JSON.stringify(state, null, 2)}
+      </div>
     </>
   )
 }

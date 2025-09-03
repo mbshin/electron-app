@@ -1,6 +1,5 @@
-import { contextBridge, ipcRenderer} from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-
 
 // Custom APIs for renderer
 const api = {}
@@ -11,15 +10,14 @@ const api = {}
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
-//     contextBridge.exposeInMainWorld('api', {
-//   ping: () => {
-  
-//     console.log("ping1")
-//       ipcRenderer.invoke("ping")
-//    return  'pong'
-// },
-// })
-   
+    //     contextBridge.exposeInMainWorld('api', {
+    //   ping: () => {
+
+    //     console.log("ping1")
+    //       ipcRenderer.invoke("ping")
+    //    return  'pong'
+    // },
+    // })
   } catch (error) {
     console.error(error)
   }
@@ -30,28 +28,15 @@ if (process.contextIsolated) {
   window.api = api
 }
 
-
-type ReadConfigResult =
-  | { ok: true; data: any }
-  | { ok: false; error: string }
-
-  
 contextBridge.exposeInMainWorld('api', {
-  ping:  async () => {
-    console.log("ping2")
-
-    const reply = await ipcRenderer.invoke('ping', 'hello')
-    // console.log
-    console.log("reply" + reply)
-
-   return reply;
+  ping: async () => {
+    return await ipcRenderer.invoke('ping', 'hello')
     // console.log("res" + ipcRenderer.invoke("ping"))
-},
- readConfig: async (): Promise<ReadConfigResult> => {
+  },
+  readConfig: async (): Promise<ReadConfigResult> => {
     return ipcRenderer.invoke('config:read')
   }
 })
-
 
 // const reply = await ipcRenderer.invoke('ping', 'hello')
 // console.log(reply) // "pong: hello"

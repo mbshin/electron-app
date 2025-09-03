@@ -6,7 +6,7 @@ import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
 import YAML from 'yaml'
 
-function configPath() {
+function configPath(): string {
   // In dev: read from repo's ./config/config.yaml
   // In prod (packaged): place config next to app resources or under userData.
   if (!app.isPackaged) {
@@ -19,8 +19,8 @@ function configPath() {
   // Option B (mutable, user-overridable):
   return path.join(app.getPath('userData'), 'config.yaml')
 }
-
-let win: BrowserWindow | null = null
+//
+// let win: BrowserWindow | null = null
 
 async function readYamlConfig(): Promise<any> {
   const fp = configPath()
@@ -77,14 +77,6 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
 
-  ipcMain.handle('config:read', async () => {
-    try {
-      return { ok: true, data: await readYamlConfig() }
-    } catch (err: any) {
-      return { ok: false, error: err?.message ?? String(err) }
-    }
-  })
-  
   createWindow()
 
   app.on('activate', function () {
@@ -108,6 +100,13 @@ app.on('window-all-closed', () => {
 // return "pong20"
 // });
 
+ipcMain.handle('config:read', async () => {
+  try {
+    return { ok: true, data: await readYamlConfig() }
+  } catch (err: any) {
+    return { ok: false, error: err?.message ?? String(err) }
+  }
+})
 
 ipcMain.handle('ping', async (_event, msg) => {
   console.log(msg)
