@@ -1,0 +1,11 @@
+# config/config.yaml
+app:
+  name: Powerbase Test Client
+  env: dev
+server:
+  host: 127.0.0.1
+  port: 9000
+features:
+  - orders
+  - executions
+  - monitor

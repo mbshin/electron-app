@@ -1,17 +1,32 @@
-import { useState } from "react"
+import { useEffect, useState } from 'react'
 
 
-declare global {
-  interface Window {
-    api: { ping: () => string }
-  }
-}
+
+
+type LoadState =
+  | { kind: 'idle' }
+  | { kind: 'loading' }
+  | { kind: 'error'; msg: string }
+  | { kind: 'ready'; cfg: any }
 
 export default function App() {
   // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 
 
    const [result, setResult] = useState("")
+ const [state, setState] = useState<LoadState>({ kind: 'idle' })
+
+ useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      setState({ kind: 'loading' })
+      const res = await window.api.readConfig()
+      if (!mounted) return
+      if (res.ok) setState({ kind: 'ready', cfg: res.data })
+      else setState({ kind: 'error', msg: res.error })
+    })()
+    return () => { mounted = false }
+  }, [])
 
   const handleClick = async () => {
     // example: call Electron preload API
@@ -29,6 +44,7 @@ export default function App() {
           <div>
       <button onClick={handleClick}>Load Config</button>
       <p>{result}</p>
+         {JSON.stringify(state.cfg, null, 2)}
     </div>
 
       

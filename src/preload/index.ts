@@ -30,6 +30,12 @@ if (process.contextIsolated) {
   window.api = api
 }
 
+
+type ReadConfigResult =
+  | { ok: true; data: any }
+  | { ok: false; error: string }
+
+  
 contextBridge.exposeInMainWorld('api', {
   ping:  async () => {
     console.log("ping2")
@@ -41,6 +47,9 @@ contextBridge.exposeInMainWorld('api', {
    return reply;
     // console.log("res" + ipcRenderer.invoke("ping"))
 },
+ readConfig: async (): Promise<ReadConfigResult> => {
+    return ipcRenderer.invoke('config:read')
+  }
 })
 
 

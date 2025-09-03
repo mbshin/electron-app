@@ -2,6 +2,31 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import * as fs from 'node:fs/promises'
+import * as path from 'node:path'
+import YAML from 'yaml'
+
+function configPath() {
+  // In dev: read from repo's ./config/config.yaml
+  // In prod (packaged): place config next to app resources or under userData.
+  if (!app.isPackaged) {
+    return path.resolve(process.cwd(), 'config', 'config.yaml')
+  }
+  // Option A (read-only, bundled/next to resources):
+  //   Put your file next to process.resourcesPath (e.g., in extraResources during packaging)
+  //   return path.join(process.resourcesPath, 'config', 'config.yaml')
+
+  // Option B (mutable, user-overridable):
+  return path.join(app.getPath('userData'), 'config.yaml')
+}
+
+let win: BrowserWindow | null = null
+
+async function readYamlConfig(): Promise<any> {
+  const fp = configPath()
+  const raw = await fs.readFile(fp, 'utf-8')
+  return YAML.parse(raw)
+}
 
 function createWindow(): void {
   // Create the browser window.
@@ -52,6 +77,14 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
 
+  ipcMain.handle('config:read', async () => {
+    try {
+      return { ok: true, data: await readYamlConfig() }
+    } catch (err: any) {
+      return { ok: false, error: err?.message ?? String(err) }
+    }
+  })
+  
   createWindow()
 
   app.on('activate', function () {
