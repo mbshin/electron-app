@@ -15,8 +15,6 @@ export default function MessageForm({ isConnected, onSend, isLoading = false }: 
     setMessage('') // clear after sending
   }
 
-  // if (!isConnected) return null;
-
   return (
     <div className="bg-white rounded-2xl shadow p-6 mt-4">
       <h2 className="text-lg font-semibold text-gray-800 mb-4">Send Message</h2>
@@ -43,10 +41,9 @@ export default function MessageForm({ isConnected, onSend, isLoading = false }: 
           />
         </div>
 
-        {/* Send Button */}
         <button
           onClick={handleSend}
-          disabled={isLoading || !message.trim()}
+          disabled={isLoading || !message.trim() || isConnected}
           className={`w-full py-2 px-4 rounded-lg text-sm font-medium shadow
             ${
               isLoading || !message.trim()

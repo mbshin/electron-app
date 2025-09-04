@@ -1,6 +1,7 @@
 import { JSX, useEffect, useState } from 'react'
 import ConnectForm from '@renderer/components/ConnectForm'
 import MessageForm from '@renderer/components/MessageForm'
+import MessageLog from '@renderer/components/MessageLog'
 
 type LoadState =
   | { kind: 'idle' }
@@ -14,8 +15,8 @@ export default function App(): JSX.Element {
   const [result, setResult] = useState('')
   const [state, setState] = useState<LoadState>({ kind: 'idle' })
 
-  const [isConnected, setIsConnected] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isConnected, setIsConnected] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     let mounted = true
@@ -38,17 +39,15 @@ export default function App(): JSX.Element {
   }
 
   const handleSend = (msg: string) => {
-    setIsLoading(true);
-    console.log("Sending message:", msg);
+    setIsLoading(true)
+    console.log('Sending message:', msg)
 
     // Simulate async send
     setTimeout(() => {
-      setIsLoading(false);
-      console.log("Message sent:", msg);
-    }, 1000);
-  };
-
-
+      setIsLoading(false)
+      console.log('Message sent:', msg)
+    }, 1000)
+  }
 
   return (
     <>
@@ -56,12 +55,22 @@ export default function App(): JSX.Element {
         <div className="max-w-lg mx-auto mt-10 space-y-4">
           <button onClick={handleClick}>Load Config</button>
 
-
           <ConnectForm />
-          <MessageForm
-            isConnected={isConnected}
-            onSend={handleSend}
-            isLoading={isLoading}
+          <MessageForm isConnected={isConnected} onSend={handleSend} isLoading={isLoading} />
+          <MessageLog
+            messages={[
+              {
+                id: 1,
+                type: 'sent',
+                text: 'gjlsajglsajglsajglsagd',
+                timestamp: new Date(Date.now() - 1000 * 60 * 5)
+              },{
+                id: 1,
+                type: 'received',
+                text: 'gjlsajglsajglsajglsagd',
+                timestamp: new Date(Date.now() - 1000 * 60 * 5)
+              }
+            ]}
           />
 
           <pre>{JSON.stringify(state, null, 2)}</pre>
