@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import React, { useState } from 'react'
 
-type MsgType = "NEW_ORDER" | "CANCEL" | "AMEND"
+type MsgType = 'NEW_ORDER' | 'CANCEL' | 'AMEND'
 
 type Props = { onSent: (hex: string) => void; disabled?: boolean }
 
@@ -18,12 +18,12 @@ const Row = ({ children }: { children: React.ReactNode }) => (
 )
 
 const Input = ({
-                 label,
-                 value,
-                 onChange,
-                 type = "text",
-                 disabled,
-               }: {
+  label,
+  value,
+  onChange,
+  type = 'text',
+  disabled
+}: {
   label: string
   value: string
   onChange: (v: string) => void
@@ -51,12 +51,12 @@ const Input = ({
 )
 
 const Select = ({
-                  label,
-                  value,
-                  options,
-                  onChange,
-                  disabled,
-                }: {
+  label,
+  value,
+  options,
+  onChange,
+  disabled
+}: {
   label: string
   value: string
   options: string[]
@@ -86,21 +86,21 @@ const Select = ({
 
 // ---- Component ----
 export default function OrderForm({ onSent, disabled }: Props) {
-  const [type, setType] = useState<MsgType>("NEW_ORDER")
+  const [type, setType] = useState<MsgType>('NEW_ORDER')
   const [f, setF] = useState<any>({
-    ACNT_NO: "",
-    ISIN: "",
-    SIDE: "BUY",
-    ORD_TYPE: "LIMIT",
-    QTY: "1",
-    PRICE: "0",
-    TIF: "DAY",
-    SHORT_CD: "General",
-    CL_ORD_ID: "",
-    ORIG_CL_ID: "",
-    REASON: "UserReq",
-    NEW_QTY: "",
-    NEW_PRICE: "",
+    ACNT_NO: '',
+    ISIN: '',
+    SIDE: 'BUY',
+    ORD_TYPE: 'LIMIT',
+    QTY: '1',
+    PRICE: '0',
+    TIF: 'DAY',
+    SHORT_CD: 'General',
+    CL_ORD_ID: '',
+    ORIG_CL_ID: '',
+    REASON: 'UserReq',
+    NEW_QTY: '',
+    NEW_PRICE: ''
   })
   const [err, setErr] = useState<string>()
   const [isSending, setIsSending] = useState(false)
@@ -137,91 +137,186 @@ export default function OrderForm({ onSent, disabled }: Props) {
       </div>
 
       {/* ---------- NEW ORDER ---------- */}
-      {type === "NEW_ORDER" && (
+      {type === 'NEW_ORDER' && (
         <div className="grid gap-4">
           <Row>
             <label>Account</label>
-            <Input label="Account" value={f.ACNT_NO} onChange={(v) => setF({ ...f, ACNT_NO: v })} disabled={disabledAll} />
+            <Input
+              label="Account"
+              value={f.ACNT_NO}
+              onChange={(v) => setF({ ...f, ACNT_NO: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>ISIN</label>
-            <Input label="ISIN" value={f.ISIN} onChange={(v) => setF({ ...f, ISIN: v })} disabled={disabledAll} />
+            <Input
+              label="ISIN"
+              value={f.ISIN}
+              onChange={(v) => setF({ ...f, ISIN: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>Side</label>
-            <Select label="Side" value={f.SIDE} options={["BUY", "SELL"]} onChange={(v) => setF({ ...f, SIDE: v })} disabled={disabledAll} />
+            <Select
+              label="Side"
+              value={f.SIDE}
+              options={['BUY', 'SELL']}
+              onChange={(v) => setF({ ...f, SIDE: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>Order Type</label>
-            <Select label="Order Type" value={f.ORD_TYPE} options={["LIMIT", "MARKET"]} onChange={(v) => setF({ ...f, ORD_TYPE: v })} disabled={disabledAll} />
+            <Select
+              label="Order Type"
+              value={f.ORD_TYPE}
+              options={['LIMIT', 'MARKET']}
+              onChange={(v) => setF({ ...f, ORD_TYPE: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>Qty</label>
-            <Input label="Qty" value={f.QTY} onChange={(v) => setF({ ...f, QTY: v })} disabled={disabledAll} />
+            <Input
+              label="Qty"
+              value={f.QTY}
+              onChange={(v) => setF({ ...f, QTY: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>Price</label>
-            <Input label="Price" value={f.PRICE} onChange={(v) => setF({ ...f, PRICE: v })} disabled={disabledAll} />
+            <Input
+              label="Price"
+              value={f.PRICE}
+              onChange={(v) => setF({ ...f, PRICE: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>TIF</label>
-            <Select label="TIF" value={f.TIF} options={["DAY", "IOC", "FOK"]} onChange={(v) => setF({ ...f, TIF: v })} disabled={disabledAll} />
+            <Select
+              label="TIF"
+              value={f.TIF}
+              options={['DAY', 'IOC', 'FOK']}
+              onChange={(v) => setF({ ...f, TIF: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>Short Sell</label>
-            <Select label="Short Sell" value={f.SHORT_CD} options={["General", "Borrowed", "Other"]} onChange={(v) => setF({ ...f, SHORT_CD: v })} disabled={disabledAll} />
+            <Select
+              label="Short Sell"
+              value={f.SHORT_CD}
+              options={['General', 'Borrowed', 'Other']}
+              onChange={(v) => setF({ ...f, SHORT_CD: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>Client Ord ID</label>
-            <Input label="Client Ord ID" value={f.CL_ORD_ID} onChange={(v) => setF({ ...f, CL_ORD_ID: v })} disabled={disabledAll} />
+            <Input
+              label="Client Ord ID"
+              value={f.CL_ORD_ID}
+              onChange={(v) => setF({ ...f, CL_ORD_ID: v })}
+              disabled={disabledAll}
+            />
           </Row>
         </div>
       )}
 
       {/* ---------- CANCEL ---------- */}
-      {type === "CANCEL" && (
+      {type === 'CANCEL' && (
         <div className="grid gap-4">
           <Row>
             <label>Account</label>
-            <Input label="Account" value={f.ACNT_NO} onChange={(v) => setF({ ...f, ACNT_NO: v })} disabled={disabledAll} />
+            <Input
+              label="Account"
+              value={f.ACNT_NO}
+              onChange={(v) => setF({ ...f, ACNT_NO: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>Orig Client ID</label>
-            <Input label="Orig Client ID" value={f.ORIG_CL_ID} onChange={(v) => setF({ ...f, ORIG_CL_ID: v })} disabled={disabledAll} />
+            <Input
+              label="Orig Client ID"
+              value={f.ORIG_CL_ID}
+              onChange={(v) => setF({ ...f, ORIG_CL_ID: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>Reason</label>
-            <Select label="Reason" value={f.REASON} options={["UserReq", "Policy"]} onChange={(v) => setF({ ...f, REASON: v })} disabled={disabledAll} />
+            <Select
+              label="Reason"
+              value={f.REASON}
+              options={['UserReq', 'Policy']}
+              onChange={(v) => setF({ ...f, REASON: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>New Client ID</label>
-            <Input label="New Client ID" value={f.CL_ORD_ID} onChange={(v) => setF({ ...f, CL_ORD_ID: v })} disabled={disabledAll} />
+            <Input
+              label="New Client ID"
+              value={f.CL_ORD_ID}
+              onChange={(v) => setF({ ...f, CL_ORD_ID: v })}
+              disabled={disabledAll}
+            />
           </Row>
         </div>
       )}
 
       {/* ---------- AMEND ---------- */}
-      {type === "AMEND" && (
+      {type === 'AMEND' && (
         <div className="grid gap-4">
           <Row>
             <label>Account</label>
-            <Input label="Account" value={f.ACNT_NO} onChange={(v) => setF({ ...f, ACNT_NO: v })} disabled={disabledAll} />
+            <Input
+              label="Account"
+              value={f.ACNT_NO}
+              onChange={(v) => setF({ ...f, ACNT_NO: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>Orig Client ID</label>
-            <Input label="Orig Client ID" value={f.ORIG_CL_ID} onChange={(v) => setF({ ...f, ORIG_CL_ID: v })} disabled={disabledAll} />
+            <Input
+              label="Orig Client ID"
+              value={f.ORIG_CL_ID}
+              onChange={(v) => setF({ ...f, ORIG_CL_ID: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>New Qty</label>
-            <Input label="New Qty" value={f.NEW_QTY} onChange={(v) => setF({ ...f, NEW_QTY: v })} disabled={disabledAll} />
+            <Input
+              label="New Qty"
+              value={f.NEW_QTY}
+              onChange={(v) => setF({ ...f, NEW_QTY: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>New Price</label>
-            <Input label="New Price" value={f.NEW_PRICE} onChange={(v) => setF({ ...f, NEW_PRICE: v })} disabled={disabledAll} />
+            <Input
+              label="New Price"
+              value={f.NEW_PRICE}
+              onChange={(v) => setF({ ...f, NEW_PRICE: v })}
+              disabled={disabledAll}
+            />
           </Row>
           <Row>
             <label>New Client ID</label>
-            <Input label="New Client ID" value={f.CL_ORD_ID} onChange={(v) => setF({ ...f, CL_ORD_ID: v })} disabled={disabledAll} />
+            <Input
+              label="New Client ID"
+              value={f.CL_ORD_ID}
+              onChange={(v) => setF({ ...f, CL_ORD_ID: v })}
+              disabled={disabledAll}
+            />
           </Row>
         </div>
       )}
@@ -235,7 +330,7 @@ export default function OrderForm({ onSent, disabled }: Props) {
           onClick={send}
           className="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
         >
-          {isSending ? "Sending..." : "Send"}
+          {isSending ? 'Sending...' : 'Send'}
         </button>
       </div>
     </div>

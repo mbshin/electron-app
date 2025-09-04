@@ -3,6 +3,9 @@ import ConnectForm from '@renderer/components/ConnectForm'
 import MessageForm from '@renderer/components/MessageForm'
 import MessageLog from '@renderer/components/MessageLog'
 import OrderForm from '@renderer/components/OrderFrom'
+import NewOrderForm, { NewOrderOut } from '@renderer/components/NewOrderForm'
+import CancelOrderForm from '@renderer/components/CancelOrderForm'
+import AmendOrderForm from '@renderer/components/AmendOrderForm'
 
 type LoadState =
   | { kind: 'idle' }
@@ -50,13 +53,16 @@ export default function App(): JSX.Element {
     }, 1000)
   }
 
+  const handleConnect = (host, p1, p2): void => {
+    console.log(host, p1, p2)
+  }
   return (
     <>
       <div className="min-h-screen bg-gray-50 text-gray-900 p-6">
         <div className="max-w-lg mx-auto mt-10 space-y-4">
           <button onClick={handleClick}>Load Config</button>
 
-          <ConnectForm />
+          <ConnectForm isConnected={false} handleConnect={handleConnect} />
           <MessageForm isConnected={isConnected} onSend={handleSend} isLoading={isLoading} />
           <MessageLog
             messages={[
@@ -76,6 +82,16 @@ export default function App(): JSX.Element {
           />
 
           <OrderForm onSent={() => console.log('test')} />
+
+          <div className="bg-white rounded-2xl shadow p-6">
+            <NewOrderForm onState={() => {}} />
+          </div>
+          <div className="bg-white rounded-2xl shadow p-6">
+            <CancelOrderForm onState={() => {}} />
+          </div>
+          <div className="bg-white rounded-2xl shadow p-6">
+            <AmendOrderForm onState={() => {}} />
+          </div>
 
           <pre>{JSON.stringify(state, null, 2)}</pre>
           <pre>{result}</pre>

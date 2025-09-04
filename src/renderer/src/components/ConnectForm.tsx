@@ -3,21 +3,20 @@ import React, { useState } from 'react'
 // reusable type
 type Status = 'Disconnected' | 'Connecting' | 'Connected'
 
-export default function ConnectForm() {
+interface ConnectFromProps {
+  isConnected: boolean
+  handleConnect: (host, orderPort, execPort) => void
+}
+
+export default function ConnectForm({ isConnected, handleConnect }: ConnectFromProps) {
   const [host, setHost] = useState<string>('localhost')
   const [orderPort, setOrderPort] = useState<string>('8080')
   const [execPort, setExecPort] = useState<string>('8081')
   const [status, setStatus] = useState<Status>('Disconnected')
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('Connecting to', host, orderPort, execPort)
-
-    setStatus('Connecting')
-
-    setTimeout(() => {
-      setStatus('Connected')
-    }, 1000)
+    handleConnect(host, orderPort, execPort)
   }
 
   const statusColor =
@@ -38,7 +37,7 @@ export default function ConnectForm() {
       </div>
 
       {/* Form Section */}
-      <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-3 items-end">
+      <form onSubmit={onSubmit} className="grid grid-cols-3 gap-3 items-end">
         {/* Host */}
         <div className="flex flex-col">
           <label htmlFor="host" className="text-xs font-medium text-gray-600 mb-1">
