@@ -2,6 +2,7 @@ import { JSX, useEffect, useState } from 'react'
 import ConnectForm from '@renderer/components/ConnectForm'
 import MessageForm from '@renderer/components/MessageForm'
 import MessageLog from '@renderer/components/MessageLog'
+import OrderForm from '@renderer/components/OrderFrom'
 
 type LoadState =
   | { kind: 'idle' }
@@ -64,7 +65,8 @@ export default function App(): JSX.Element {
                 type: 'sent',
                 text: 'gjlsajglsajglsajglsagd',
                 timestamp: new Date(Date.now() - 1000 * 60 * 5)
-              },{
+              },
+              {
                 id: 1,
                 type: 'received',
                 text: 'gjlsajglsajglsajglsagd',
@@ -72,6 +74,8 @@ export default function App(): JSX.Element {
               }
             ]}
           />
+
+          <OrderForm onSent={() => console.log('test')} />
 
           <pre>{JSON.stringify(state, null, 2)}</pre>
           <pre>{result}</pre>
