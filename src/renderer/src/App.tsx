@@ -1,16 +1,21 @@
 import { JSX, useEffect, useState } from 'react'
+import ConnectForm from '@renderer/components/ConnectForm'
+import MessageForm from '@renderer/components/MessageForm'
 
 type LoadState =
   | { kind: 'idle' }
   | { kind: 'loading' }
   | { kind: 'error'; msg: string }
-  | { kind: 'ready'; cfg: any }
+  | { kind: 'ready'; cfg: string }
 
 export default function App(): JSX.Element {
   // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 
   const [result, setResult] = useState('')
   const [state, setState] = useState<LoadState>({ kind: 'idle' })
+
+  const [isConnected, setIsConnected] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     let mounted = true
@@ -26,21 +31,42 @@ export default function App(): JSX.Element {
     }
   }, [])
 
-  const handleClick = async () : Promise<void> => {
+  const handleClick = async (): Promise<void> => {
     // example: call Electron preload API
     const res = window.api?.ping()
-    // if (res.ok) {
-    //   setResult(JSON.stringify(res.data))
-    // } else {
     setResult(res)
   }
 
+  const handleSend = (msg: string) => {
+    setIsLoading(true);
+    console.log("Sending message:", msg);
+
+    // Simulate async send
+    setTimeout(() => {
+      setIsLoading(false);
+      console.log("Message sent:", msg);
+    }, 1000);
+  };
+
+
+
   return (
     <>
-      <div>
-        <button onClick={handleClick}>Load Config</button>
-        <p>{result}</p>
-        {JSON.stringify(state, null, 2)}
+      <div className="min-h-screen bg-gray-50 text-gray-900 p-6">
+        <div className="max-w-lg mx-auto mt-10 space-y-4">
+          <button onClick={handleClick}>Load Config</button>
+
+
+          <ConnectForm />
+          <MessageForm
+            isConnected={isConnected}
+            onSend={handleSend}
+            isLoading={isLoading}
+          />
+
+          <pre>{JSON.stringify(state, null, 2)}</pre>
+          <pre>{result}</pre>
+        </div>
       </div>
     </>
   )

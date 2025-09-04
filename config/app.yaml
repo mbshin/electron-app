@@ -1,17 +1,3 @@
-# config/config.yaml
-app:
-  name: Powerbase Test Client
-  env: dev
-server:
-  host: 127.0.0.1
-  port: 9000
-features:
-  - orders
-  - executions
-  - monitor
-
-host: 127.0.0.1
-port: 5000
 
 # framing:
 #  - ascii  : 4 ASCII bytes like "0123"
